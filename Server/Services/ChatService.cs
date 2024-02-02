@@ -1,9 +1,12 @@
-﻿using Microsoft.AspNetCore.Http.HttpResults;
+﻿using Amazon.S3;
+using Amazon.S3.Model;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Server.Data;
 using Server.Models;
 using Server.Services.Interfaces;
 using System.Text;
+using static AspNet.Security.OpenId.OpenIdAuthenticationConstants;
 
 namespace Server.Services
 {
@@ -18,9 +21,13 @@ namespace Server.Services
     public class ChatService:IChatService
     {
         public readonly ApplicationDbContext _context;
-        public ChatService(ApplicationDbContext context)
+        public readonly IConfiguration _configuration;
+        public readonly IAmazonS3 _s3Client;
+        public ChatService(ApplicationDbContext context, IConfiguration configuration,IAmazonS3 s3Client)
         {
             _context = context;
+            _configuration = configuration;
+            _s3Client = s3Client;
         }
         public async Task<Chat> CreateChat(long userId,long toUserId)
         {
@@ -51,38 +58,23 @@ namespace Server.Services
                 
             };
 
-            if (model.Image != null) message.ImageURl = model.Image.Name;
+            if (model.Image != null) {
+                string keyString = $"{model.ChatId}/{Guid.NewGuid()}{Path.GetExtension(model.Image.FileName)}";
+                var request = new PutObjectRequest()
+                {
+                    BucketName = _configuration["S3BucketName"],
+                    Key =keyString,
+                    InputStream =model.Image.OpenReadStream()
+                };
+                request.Metadata.Add("Content-Type", model.Image.ContentType);
+                await _s3Client.PutObjectAsync(request);
+                message.ImageKey = keyString;
+            }
             await _context.AddAsync(message);
             await _context.SaveChangesAsync();
             return message;
         }
-        //function that i lately maybe will use to push images to db
-        public static ImageFormat GetImageFormat(byte[] bytes)
-        {
-            // see http://www.mikekunz.com/image_file_header.html  
-            var bmp = Encoding.ASCII.GetBytes("BM");     // BMP
-            var gif = Encoding.ASCII.GetBytes("GIF");    // GIF
-            var png = new byte[] { 137, 80, 78, 71 };    // PNG
-            var jpeg = new byte[] { 255, 216, 255, 224 }; // jpeg
-            var jpeg2 = new byte[] { 255, 216, 255, 225 }; // jpeg canon
-
-            if (bmp.SequenceEqual(bytes.Take(bmp.Length)))
-                return ImageFormat.bmp;
-
-            if (gif.SequenceEqual(bytes.Take(gif.Length)))
-                return ImageFormat.gif;
-
-            if (png.SequenceEqual(bytes.Take(png.Length)))
-                return ImageFormat.png;
-
-            if (jpeg.SequenceEqual(bytes.Take(jpeg.Length)))
-                return ImageFormat.jpeg;
-
-            if (jpeg2.SequenceEqual(bytes.Take(jpeg2.Length)))
-                return ImageFormat.jpeg;
-
-            return ImageFormat.unknown;
-        }
+        
 
         public IEnumerable<Message>? GetMessages(int chatId, long fromId, int limit)
         {

@@ -48,7 +48,7 @@ namespace Server.Events
                 {
                     AvatarHash = responseUser.avatarhash,
                     UserName = responseUser.personaname,
-                    SteamId = responseUser.steamid,
+                    Id = responseUser.steamid,
                 };
                 dbContext.Add(user);
                 dbContext.SaveChanges();

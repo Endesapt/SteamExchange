@@ -8,11 +8,10 @@ using System.Text.Json.Serialization;
 
 namespace Server.Models
 {
-    [Index(nameof(Id), IsUnique = true)]
     [Index(nameof(ChatId))]
     public class Message
     {
-        [JsonIgnore]
+        [Key]
         public long Id { get; set; }
         public required DateTime SendTime { get; set; }
         public required int ChatId { get; set; }
@@ -21,7 +20,9 @@ namespace Server.Models
 
         [NotNull]
         public required string MessageText { get; set; }
-        public string? ImageURl { get; set; }
+        public string? ImageKey { get; set; }
+
+        public string? TradeJson { get; set; }
 
 
     }

@@ -2,7 +2,7 @@
 
 namespace Server.ResponseModels
 {
-    public class GetMessagesResponce
+    public class GetMessagesResponse
     {
         public required IEnumerable<Message> Messages { get; set; }
         public required long LastMessageId { get; set; }
