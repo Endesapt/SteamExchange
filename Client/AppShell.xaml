@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="Client.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:Client"
+    Shell.FlyoutBehavior="Disabled"
+    Title="Client">
+    <TabBar>
+        <Tab Title="Аукционы" Icon="icons/chart_line.png">
+            <ShellContent
+            Title=""
+            ContentTemplate="{DataTemplate local:AuctionPage}"
+            Route="AuctionPage" /> 
+        </Tab>
+        <Tab Title="Обмен" Icon="icons/rotate.png">
+            <ShellContent
+            Title=""
+            ContentTemplate="{DataTemplate local:AuctionPage}"
+            Route="Page" /> 
+        </Tab>
+        <Tab Title="Люди" Icon="icons/users.png">
+            <ShellContent
+            Title=""
+            ContentTemplate="{DataTemplate local:InventoriesPage}"
+            Route="PeoplePage" />   
+        </Tab>
+        <Tab Title="Меню" Icon="icons/bars.png">
+            <ShellContent
+             Title=""
+             ContentTemplate="{DataTemplate local:AuctionPage}"
+             Route="MenuPage" />    
+        </Tab>
+        
+    </TabBar>
+    
+
+</Shell>

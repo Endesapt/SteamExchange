@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Client.InventoriesPage"
+             Title="">
+    <Grid Margin="0,10,0,0" RowSpacing="10" RowDefinitions="60,60,*"  >
+        <Grid  ColumnDefinitions="130,50,*"  Grid.Row="0" ColumnSpacing="20" VerticalOptions="Center" HeightRequest="50">
+        </Grid>
+        <Button Margin="10" Grid.Row="1" Text="Поднять все на первое место"/>
+        <CollectionView  Grid.Row="2"
+     SelectionMode="None">
+            <CollectionView.ItemsSource>
+                <x:Array Type="{x:Type x:String}">
+                    <x:String>Tom</x:String>
+                    <x:String>Sam</x:String>
+                    <x:String>Bob</x:String>
+                    <x:String>Alice</x:String>
+                    <x:String>Kate</x:String>
+                </x:Array>
+            </CollectionView.ItemsSource>
+            <CollectionView.ItemTemplate>
+                <DataTemplate >
+                    <VerticalStackLayout   Margin="0,10" Padding="0,0,0,10" BackgroundColor="{StaticResource AuctionCard}" >
+                        <Grid HeightRequest="60" Padding="0,0,15,0" ColumnDefinitions="60,*,Auto">
+                            <Border HeightRequest="35" WidthRequest="35"
+                             StrokeShape="RoundRectangle 40">
+                                <Image Source="negros.png" WidthRequest="35" HeightRequest="35"/>
+                            </Border>
+                            <VerticalStackLayout Grid.Column="1" VerticalOptions="Center">
+                                <Label Text="Endesap1" FontAttributes="Bold" />
+                                <Label Text="46 скинов" />
+                            </VerticalStackLayout>
+                            <Frame Grid.Column="2" CornerRadius="25" Margin="0,0,10,0" HeightRequest="45" 
+                                   WidthRequest="45" BorderColor="Transparent">
+                                <Image Source="icons/comments.png" VerticalOptions="Center" HorizontalOptions="Center" 
+                                       WidthRequest="20" HeightRequest="20"/>
+                            </Frame>
+                        </Grid>
+                        <BoxView Color="LightGray" HeightRequest="3"/>
+                        <Grid ColumnDefinitions="Auto,*" Padding="10">
+                            <Label Text="30.09 $" FontAttributes="Bold" FontSize="Medium" HorizontalOptions="End" Grid.Column="1"/>
+                        </Grid>
+                        <CollectionView
+                     ItemsLayout="HorizontalList"
+                     HeightRequest="150"
+                     SelectionMode="None"
+                     >
+                            <CollectionView.ItemsSource>
+                                <x:Array Type="{x:Type x:String}">
+                                    <x:String>Tom</x:String>
+                                    <x:String>Sam</x:String>
+                                    <x:String>Bob</x:String>
+                                    <x:String>Alice</x:String>
+                                    <x:String>Kate</x:String>
+                                </x:Array>
+                            </CollectionView.ItemsSource>
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate >
+                                    <AbsoluteLayout Margin="10,0,0,0">
+                                        <AbsoluteLayout.Background>
+                                            <!-- StartPoint defaults to (0,0) -->
+                                            <LinearGradientBrush EndPoint="0,1">
+                                                <GradientStop Color="#810000ff" Offset="0.1" />
+                                                <GradientStop Color="#510000ff" Offset="1.0" />
+                                            </LinearGradientBrush>
+                                        </AbsoluteLayout.Background>
+                                        <Image Source="https://steamcommunity-a.akamaihd.net/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXU5A1PIYQNqhpOSV-fRPasw8rsUFJ5KBFZv668FFQwnfCcJmxDv9rhwIHZwqP3a-uGwz9Xv8F0j-qQrI3xiVLkrxVuZW-mJoWLMlhpWhFkc9M"
+                                        HeightRequest="150"
+                                        WidthRequest="150"
+                                         />
+                                        <Label Text="3.09$" FontAttributes="Bold" TextColor="White" AbsoluteLayout.LayoutBounds="5,120" FontSize="15" />
+                                        <Label Text="MW" FontAttributes="Bold" TextColor="White" AbsoluteLayout.LayoutBounds="5,100" FontSize="15" />
+                                    </AbsoluteLayout>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+
+                        </CollectionView>
+                    </VerticalStackLayout>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+</ContentPage>
