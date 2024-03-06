@@ -11,5 +11,6 @@ namespace Server.Models
         public required string UserName { get; set; }
         public required string AvatarHash { get; set; }
 
+        public List<UserWeapon> Weapons { get; set; } = null!;
     }
 }

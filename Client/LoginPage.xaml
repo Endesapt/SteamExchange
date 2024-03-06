@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Client.LoginPage"
+             xmlns:viewmodel="clr-namespace:Client.ViewModel"
+              x:DataType="viewmodel:LoginViewModel"
+             Shell.NavBarIsVisible="False"
+             Title="">
+    <ScrollView>
+        <VerticalStackLayout Margin="20">
+            <Image Source="logo.png" HeightRequest="80"/>
+
+            <VerticalStackLayout Margin="0,50">
+                <Label TextColor="{StaticResource Secondary}" 
+                   FontSize="16"
+                   HorizontalTextAlignment="Center"
+                   Text="Login"/>
+            </VerticalStackLayout>
+
+            <Label Margin="10,20,10,20" 
+            HorizontalOptions="Center" TextColor="{StaticResource Primary}" 
+                   FontSize="20" Text="login to SkinExchange"/>
+
+            <Button Margin="100,20,100,20" 
+                Command="{Binding LoginCommand}"
+                BackgroundColor="{StaticResource Secondary}"
+                Text="Login" TextColor="{StaticResource Primary}"/>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

@@ -1,4 +1,6 @@
+using Amazon.Runtime;
 using Amazon.S3;
+using Keycloak.AuthServices.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Hosting.Server;
@@ -9,10 +11,13 @@ using Server.Data;
 using Server.Events;
 using Server.Hubs;
 using Server.Models;
+using Server.ResponseModels;
 using Server.Services;
 using Server.Services.Interfaces;
+using Server.Workers;
 using System;
 using System.Security.Claims;
+using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,30 +28,27 @@ builder.Services.AddSignalR();
 builder.Services.AddControllers();
 // Add database
 
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-options.UseMySQL("server = localhost; user = root; database = test_db; password =admin;")
+builder.Services.AddDbContextPool<ApplicationDbContext>(options =>
+{
+    options.UseMySQL("server = localhost; user = root; database = test_db; password =admin;");
+}
 );
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDefaultAWSOptions(builder.Configuration.GetAWSOptions());
-builder.Services.AddAuthentication(options =>
+
+builder.Services.AddAuthorization();
+builder.Services.AddKeycloakAuthentication(builder.Configuration, o =>
 {
-    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-})
-.AddCookie(options =>
-     {
-         options.LoginPath = "/login";
-         options.LogoutPath = "/signout";
-     })
-.AddSteam(options =>
-{
-    options.Events.OnAuthenticated = AuthenticationEvents.OnAuthenticated;
+    o.RequireHttpsMetadata = false;
 });
 builder.Services.AddAuthorization();
-//My services
+//Services
 builder.Services.AddTransient<IChatService,ChatService>();
 builder.Services.AddAWSService<IAmazonS3>();
+//Workers
+builder.Services.AddHostedService<WeaponUpdateWorker>();
 
 var app = builder.Build();
 
@@ -62,7 +64,7 @@ app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
-
 app.MapControllers();
 app.MapHub<ChatHub>("/chat");
+
 app.Run();

@@ -28,6 +28,8 @@
     <Color x:Key="Gray900">#212121</Color>
     <Color x:Key="Gray950">#141414</Color>
     <Color x:Key="AuctionCard">#3243ff64</Color>
+    <Color x:Key="GradinentStartLight">#810000ff</Color>
+    <Color x:Key="GradientEndLight">#510000ff</Color>
 
     <SolidColorBrush x:Key="PrimaryBrush" Color="{StaticResource Primary}"/>
     <SolidColorBrush x:Key="SecondaryBrush" Color="{StaticResource Secondary}"/>

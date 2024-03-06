@@ -2,9 +2,9 @@ using Client.ViewModel;
 
 namespace Client;
 
-public partial class ChatPage : ContentPage
+public partial class DialogPage : ContentPage
 {
-	public ChatPage(ChatViewModel vm)
+	public DialogPage(DialogViewModel vm)
 	{
 		InitializeComponent();
 		BindingContext = vm;

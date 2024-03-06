@@ -6,32 +6,36 @@
     xmlns:local="clr-namespace:Client"
     Shell.FlyoutBehavior="Disabled"
     Title="Client">
-    <TabBar>
+    <ShellContent ContentTemplate="{DataTemplate local:LoadingPage}"
+                  Route="LoadingPage"/>
+    <TabBar x:Name="NavBar">
+       
         <Tab Title="Аукционы" Icon="icons/chart_line.png">
             <ShellContent
             Title=""
             ContentTemplate="{DataTemplate local:AuctionPage}"
             Route="AuctionPage" /> 
         </Tab>
+        <Tab Title="Люди" Icon="icons/users.png">
+            <ShellContent
+             Title=""
+             ContentTemplate="{DataTemplate local:InventoriesPage}"
+             Route="InventoriesPage" />
+        </Tab>
         <Tab Title="Обмен" Icon="icons/rotate.png">
             <ShellContent
             Title=""
-            ContentTemplate="{DataTemplate local:AuctionPage}"
-            Route="Page" /> 
+            ContentTemplate="{DataTemplate local:TradePage}"
+            Route="TradePage" /> 
         </Tab>
-        <Tab Title="Люди" Icon="icons/users.png">
+        <Tab Title="Чаты" Icon="icons/comment.png">
             <ShellContent
-            Title=""
-            ContentTemplate="{DataTemplate local:InventoriesPage}"
-            Route="PeoplePage" />   
+                Title=""
+                ContentTemplate="{DataTemplate local:ChatPage}"
+                Route="ChatPage" />
         </Tab>
-        <Tab Title="Меню" Icon="icons/bars.png">
-            <ShellContent
-             Title=""
-             ContentTemplate="{DataTemplate local:AuctionPage}"
-             Route="MenuPage" />    
-        </Tab>
-        
+
+
     </TabBar>
     
 

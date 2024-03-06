@@ -418,6 +418,10 @@
         <Setter Property="Shell.TabBarTitleColor" Value="{AppThemeBinding Light={StaticResource Magenta}, Dark={StaticResource White}}" />
         <Setter Property="Shell.TabBarUnselectedColor" Value="{AppThemeBinding Light={StaticResource Gray900}, Dark={StaticResource Gray200}}" />
     </Style>
+    <Style TargetType="Image">
+        <Setter Property="VerticalOptions" Value="Center"/>
+        <Setter Property="HorizontalOptions" Value="Center"/>
+    </Style>
 
     <Style TargetType="NavigationPage">
         <Setter Property="BarBackgroundColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource OffBlack}}" />
@@ -430,6 +434,19 @@
         <Setter Property="BarTextColor" Value="{AppThemeBinding Light={StaticResource Magenta}, Dark={StaticResource White}}" />
         <Setter Property="UnselectedTabColor" Value="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray950}}" />
         <Setter Property="SelectedTabColor" Value="{AppThemeBinding Light={StaticResource Gray950}, Dark={StaticResource Gray200}}" />
+    </Style>
+    <Style x:Key="ItemLayout" TargetType="AbsoluteLayout">
+        <Setter Property="Margin" Value="10,0,0,0"/>
+        <Setter Property="Background">
+            <LinearGradientBrush EndPoint="0,1">
+                <GradientStop Color="{StaticResource GradinentStartLight}" Offset="0.1" />
+                <GradientStop Color="{StaticResource GradientEndLight}" Offset="1.0" />
+            </LinearGradientBrush>
+        </Setter>
+    </Style>
+    <Style x:Key="ItemLabel" TargetType="Label">
+        <Setter Property="FontSize" Value="Small"/>
+        <Setter Property="TextColor" Value="White"/>
     </Style>
 
 </ResourceDictionary>

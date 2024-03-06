@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Client.ProfilePage"
+             Title="">
+    <Grid RowDefinitions="50,130,Auto,Auto,40,*">
+        <Grid ColumnDefinitions="40,*,40">
+            <Image Source="icons/angle_left.png" HeightRequest="20"/>
+            <Label Grid.Column="1" HorizontalTextAlignment="Center" Text="Профиль"/>
+            <Image Grid.Column="2" Source="icons/ellipsis_vertical.png" HeightRequest="20"/>
+        </Grid>
+        <Border  Grid.Row="1" HeightRequest="90" WidthRequest="90" 
+                StrokeShape="RoundRectangle 45" Stroke="Gold"
+                 VerticalOptions="End" HorizontalOptions="Center">
+            <Image Source="negros.png" HeightRequest="90" WidthRequest="90"/>
+        </Border>
+        <VerticalStackLayout Grid.Row="2">
+            <Label HorizontalOptions="Center" Padding="10"
+                   Text="SMat.la" FontSize="Medium"/>
+            <Button Text="Редактировать" VerticalOptions="Center" Padding="3"
+                    FontSize="9" WidthRequest="80" HeightRequest="20" 
+                    CornerRadius="30" BackgroundColor="Gray"/>
+            <Label TextColor="LightGray" Text="Люблю смотреть аниме и делать трейды ^_^ " 
+                   WidthRequest="200" 
+                   FontSize="Small" HorizontalTextAlignment="Center"/>
+        </VerticalStackLayout>
+        <Grid Grid.Row="3" HeightRequest="100" ColumnDefinitions="*,*"  ColumnSpacing="10" Padding="10">
+            <Frame Padding="10" BorderColor="LightGray">
+                <VerticalStackLayout VerticalOptions="Start" Spacing="10">
+                    <Label Text="Баланс"/>
+                    <HorizontalStackLayout Spacing="3">
+                        <Image Source="icons/coins.png" HeightRequest="17"/>
+                        <Label FontAttributes="Bold" Text="10000" FontSize="15"/>
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+            </Frame>
+            <Frame Grid.Column="1"  Padding="10" BorderColor="LightGray">
+                <VerticalStackLayout VerticalOptions="Start" Spacing="10">
+                    <Label Text="Премиум"/>
+                    <HorizontalStackLayout Spacing="3">
+                        <Image Source="icons/star.png" HeightRequest="17"/>
+                        <Label FontAttributes="Bold" Text="19.01.2024" FontSize="15"/>
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+            </Frame>
+        </Grid>
+        <Grid Grid.Row="4" ColumnDefinitions="Auto,*,40" Padding="10">
+            <Label Text="Скины "/>
+            <Label Grid.Column="1" Text="52" FontAttributes="Bold" HorizontalTextAlignment="Start"/>
+        </Grid>
+        <CollectionView ItemsLayout="VerticalGrid, 2" Grid.Row="5" SelectionMode="None">
+            <CollectionView.ItemsSource>
+                <x:Array Type="{x:Type x:String}">
+                    <x:String>Tom</x:String>
+                    <x:String>Sam</x:String>
+                    <x:String>Bob</x:String>
+                    <x:String>Alice</x:String>
+                    <x:String>Kate</x:String>
+                    <x:String>Kate</x:String>
+                    <x:String>Kate</x:String>
+                    <x:String>Kate</x:String>
+                </x:Array>
+            </CollectionView.ItemsSource>
+            <CollectionView.ItemTemplate>
+                <DataTemplate >
+                    <Border StrokeThickness='0.5' Stroke="White">
+                        <Grid HeightRequest="120" 
+                              ColumnDefinitions="Auto,*" RowDefinitions="Auto,*" >
+                            <Grid.Background >
+                                <LinearGradientBrush EndPoint="0,1">
+                                    <GradientStop Color="{StaticResource GradinentStartLight}" Offset="0.1" />
+                                    <GradientStop Color="{StaticResource GradientEndLight}" Offset="1.0" />
+                                </LinearGradientBrush>
+                            </Grid.Background>
+                            <Label Text="31.45$" Padding="5" ZIndex="2" 
+                                   TextColor="White" FontAttributes="Bold"
+                                   FontSize="15"/>
+                            <Image Source="https://steamcommunity-a.akamaihd.net/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXU5A1PIYQNqhpOSV-fRPasw8rsUFJ5KBFZv668FFQwnfCcJmxDv9rhwIHZwqP3a-uGwz9Xv8F0j-qQrI3xiVLkrxVuZW-mJoWLMlhpWhFkc9M"
+                                HeightRequest="120" 
+                                Grid.ColumnSpan="2"
+                                Grid.RowSpan="2"
+                               />
+                            <Label Grid.Row="2" 
+                               HorizontalOptions="Start" VerticalOptions="End" 
+                               Text="MV" Padding="5" ZIndex="2" 
+                               TextColor="White" FontAttributes="Bold"
+                               FontSize="15"/>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+</ContentPage>

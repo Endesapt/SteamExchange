@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Client.LoadingPage"
+             Title="">
+    <VerticalStackLayout VerticalOptions="Center">
+        <Image Source="gifs/loading_icon.gif" HorizontalOptions="Center" 
+               HeightRequest="100" WidthRequest="200"
+               IsAnimationPlaying="True"/>
+        <Label HorizontalTextAlignment="Center">Проверка авторизации</Label>
+    </VerticalStackLayout>
+</ContentPage>

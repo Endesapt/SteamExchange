@@ -22,7 +22,8 @@ namespace Server.Models
         public required string MessageText { get; set; }
         public string? ImageKey { get; set; }
 
-        public string? TradeJson { get; set; }
+        public Trade? Trade { get; set; }
+        public Guid? TradeId { get; set; }
 
 
     }

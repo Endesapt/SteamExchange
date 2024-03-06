@@ -1,12 +1,36 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodel="clr-namespace:Client.ViewModel"
              x:Class="Client.InventoriesPage"
-             Title="">
-    <Grid Margin="0,10,0,0" RowSpacing="10" RowDefinitions="60,60,*"  >
-        <Grid  ColumnDefinitions="130,50,*"  Grid.Row="0" ColumnSpacing="20" VerticalOptions="Center" HeightRequest="50">
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             Title=""
+             >
+    <Grid Margin="0,10,0,0" RowSpacing="5" RowDefinitions="40,35,*"  >
+        <Grid  ColumnDefinitions="50,*,20,40,30,30"  Grid.Row="0" Margin="0,0,10,0"  ColumnSpacing="5" VerticalOptions="Center" HeightRequest="50">
+            <Image Source="icons/plus.png"></Image>
+            <Button Grid.Column="1" VerticalOptions="Center" HorizontalOptions="Start"
+            HeightRequest="30" Padding="8" CornerRadius="15" 
+            FontSize="11"
+            Text="Поднять все"/>
+            <Image Grid.Column="2" Source="icons/money_bill_wave.png" 
+           WidthRequest="20"/>
+            <Label Grid.Column="3" Text="0.00 $"/>
+            <Border Grid.Column="4" StrokeShape="RoundRectangle 15" 
+            HeightRequest="30" WidthRequest="30" StrokeThickness="0"
+            BackgroundColor="{StaticResource Primary}">
+                <Image Source="icons/plus.png" HeightRequest="30">
+                    <Image.Behaviors>
+                        <toolkit:IconTintColorBehavior TintColor="White" />
+                    </Image.Behaviors>
+                </Image>
+            </Border>
+            <Border Grid.Column="5" HorizontalOptions="Center" VerticalOptions="Center"
+ HeightRequest="30" WidthRequest="30" StrokeShape="RoundRectangle 30">
+                <Image Source="negros.png" HeightRequest="30" WidthRequest="30"/>
+            </Border>
         </Grid>
-        <Button Margin="10" Grid.Row="1" Text="Поднять все на первое место"/>
+        <Button Margin="10,0" Grid.Row="1" Text="Поднять все на первое место"/>
         <CollectionView  Grid.Row="2"
      SelectionMode="None">
             <CollectionView.ItemsSource>
@@ -19,7 +43,7 @@
                 </x:Array>
             </CollectionView.ItemsSource>
             <CollectionView.ItemTemplate>
-                <DataTemplate >
+                <DataTemplate x:DataType="{x:Type x:String}">
                     <VerticalStackLayout   Margin="0,10" Padding="0,0,0,10" BackgroundColor="{StaticResource AuctionCard}" >
                         <Grid HeightRequest="60" Padding="0,0,15,0" ColumnDefinitions="60,*,Auto">
                             <Border HeightRequest="35" WidthRequest="35"
@@ -32,17 +56,18 @@
                             </VerticalStackLayout>
                             <Frame Grid.Column="2" CornerRadius="25" Margin="0,0,10,0" HeightRequest="45" 
                                    WidthRequest="45" BorderColor="Transparent">
+                                <Frame.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:InventoriesViewModel}}, Path=GoToDialogCommand}"
+                                                      CommandParameter="{Binding .}" />
+                                </Frame.GestureRecognizers>
                                 <Image Source="icons/comments.png" VerticalOptions="Center" HorizontalOptions="Center" 
                                        WidthRequest="20" HeightRequest="20"/>
                             </Frame>
                         </Grid>
-                        <BoxView Color="LightGray" HeightRequest="3"/>
-                        <Grid ColumnDefinitions="Auto,*" Padding="10">
-                            <Label Text="30.09 $" FontAttributes="Bold" FontSize="Medium" HorizontalOptions="End" Grid.Column="1"/>
-                        </Grid>
+                        <BoxView Color="LightGray" HeightRequest="3" Margin="0,0,0,10"/>
                         <CollectionView
                      ItemsLayout="HorizontalList"
-                     HeightRequest="150"
+                     HeightRequest="90"
                      SelectionMode="None"
                      >
                             <CollectionView.ItemsSource>
@@ -56,20 +81,13 @@
                             </CollectionView.ItemsSource>
                             <CollectionView.ItemTemplate>
                                 <DataTemplate >
-                                    <AbsoluteLayout Margin="10,0,0,0">
-                                        <AbsoluteLayout.Background>
-                                            <!-- StartPoint defaults to (0,0) -->
-                                            <LinearGradientBrush EndPoint="0,1">
-                                                <GradientStop Color="#810000ff" Offset="0.1" />
-                                                <GradientStop Color="#510000ff" Offset="1.0" />
-                                            </LinearGradientBrush>
-                                        </AbsoluteLayout.Background>
+                                    <AbsoluteLayout Style="{StaticResource ItemLayout}">
                                         <Image Source="https://steamcommunity-a.akamaihd.net/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXU5A1PIYQNqhpOSV-fRPasw8rsUFJ5KBFZv668FFQwnfCcJmxDv9rhwIHZwqP3a-uGwz9Xv8F0j-qQrI3xiVLkrxVuZW-mJoWLMlhpWhFkc9M"
-                                        HeightRequest="150"
-                                        WidthRequest="150"
-                                         />
-                                        <Label Text="3.09$" FontAttributes="Bold" TextColor="White" AbsoluteLayout.LayoutBounds="5,120" FontSize="15" />
-                                        <Label Text="MW" FontAttributes="Bold" TextColor="White" AbsoluteLayout.LayoutBounds="5,100" FontSize="15" />
+                                         HeightRequest="90"
+                                         WidthRequest="90"
+                                          />
+                                        <Label Text="3.09$" Style="{StaticResource ItemLabel}" AbsoluteLayout.LayoutBounds="5,70"/>
+                                        <Label Text="MW" Style="{StaticResource ItemLabel}" AbsoluteLayout.LayoutBounds="5,50" />
                                     </AbsoluteLayout>
                                 </DataTemplate>
                             </CollectionView.ItemTemplate>

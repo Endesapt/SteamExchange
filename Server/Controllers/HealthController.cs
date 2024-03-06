@@ -5,10 +5,10 @@ namespace Server.Controllers
 {
     public class HealthController : Controller
     {
-        [HttpGet("/")]
+        [HttpGet("/health")]
         public string Index()
         {
-            return User.FindFirstValue(ClaimTypes.NameIdentifier);
+            return "Healthy";
         }
     }
 }

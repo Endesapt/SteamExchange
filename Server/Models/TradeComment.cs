@@ -1,19 +1,20 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Amazon.S3.Model;
+using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Server.Models
 {
+    [Index(nameof(TradeId))]
     public class TradeComment
     {
-        public Guid Id { get; set; } = Guid.NewGuid();
-        public Trade Trade { get; set; }
-        [ForeignKey("Trade")]
-        public required Guid TradeId { get; set; }
-        public User? User { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public Guid Id { get; set; }
         public required long UserId {  get; set; }
-        public required DateTime CreateTime { get; set; }
-        public required string CommentText {  get; set; }
-
+        public User User { get; set; } = null!;
+        public required Guid TradeId {  get; set; }
+        public Trade Trade { get; set; } = null!;
+        public required DateTime PostTime { get; set; }
+        public required string MessageText { get; set; }
 
     }
 }

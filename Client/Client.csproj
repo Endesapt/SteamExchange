@@ -24,7 +24,7 @@
 		<ApplicationTitle>Client</ApplicationTitle>
 
 		<!-- App Identifier -->
-		<ApplicationId>com.companyname.client</ApplicationId>
+		<ApplicationId>com.companyname.myapp</ApplicationId>
 
 		<!-- Versions -->
 		<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
@@ -45,6 +45,9 @@
 	<ItemGroup>
 		<!-- App Icon -->
 		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />
+		<MauiImage Include="Resources\Images\gifs\loading_icon.gif" />
+		<MauiImage Include="Resources\Images\icons\coins.svg" />
+		<MauiImage Include="Resources\Images\icons\star.svg" />
 
 		<!-- Splash Screen -->
 		<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#512BD4" BaseSize="128,128" />
@@ -61,29 +64,53 @@
 
 	<ItemGroup>
 	  <None Remove="Resources\Fonts\Font Awesome 6 Free-Solid-900.otf" />
+	  <None Remove="Resources\Images\gifs\Loading_icon.gif" />
+	  <None Remove="Resources\Images\icons\angle_left.svg" />
+	  <None Remove="Resources\Images\icons\coins.svg" />
 	  <None Remove="Resources\Images\icons\comment.svg" />
 	  <None Remove="Resources\Images\icons\comments.svg" />
+	  <None Remove="Resources\Images\icons\ellipsis_vertical.svg" />
 	  <None Remove="Resources\Images\icons\heart_solid.svg" />
+	  <None Remove="Resources\Images\icons\money_bill_wave.svg" />
+	  <None Remove="Resources\Images\icons\paperclip.svg" />
+	  <None Remove="Resources\Images\icons\paper_plane.svg" />
+	  <None Remove="Resources\Images\icons\star.svg" />
 	  <None Remove="Resources\Images\plus.png" />
 	</ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="CommunityToolkit.Maui" Version="7.0.1" />
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
+		<PackageReference Include="IdentityModel.OidcClient" Version="5.2.1" />
 		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>
+	  <MauiImage Include="Resources\Images\icons\angle_left.svg" />
 	  <MauiImage Include="Resources\Images\icons\bars.svg" />
 	  <MauiImage Include="Resources\Images\icons\chart_line.svg" />
 	  <MauiImage Include="Resources\Images\icons\comment.svg" />
 	  <MauiImage Include="Resources\Images\icons\comments.svg" />
 	  <MauiImage Include="Resources\Images\icons\dotnet_bot.png" Resize="True" BaseSize="300,185" />
+	  <MauiImage Include="Resources\Images\icons\ellipsis_vertical.svg" />
 	  <MauiImage Include="Resources\Images\icons\heart_solid.svg" />
+	  <MauiImage Include="Resources\Images\icons\money_bill_wave.svg" />
+	  <MauiImage Include="Resources\Images\icons\paperclip.svg" />
+	  <MauiImage Include="Resources\Images\icons\paper_plane.svg" />
 	  <MauiImage Include="Resources\Images\icons\plus.png" />
 	  <MauiImage Include="Resources\Images\icons\rotate.svg" />
 	  <MauiImage Include="Resources\Images\icons\users.svg" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Compile Update="ChatPage.xaml.cs">
+	    <DependentUpon>ChatPage.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="LoginPage.xaml.cs">
+	    <DependentUpon>LoginPage.xaml</DependentUpon>
+	  </Compile>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -93,7 +120,22 @@
 	  <MauiXaml Update="ChatPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="DialogPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="InventoriesPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="LoadingPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="LoginPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="ProfilePage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="TradePage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>
