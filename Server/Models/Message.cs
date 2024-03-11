@@ -8,7 +8,7 @@ using System.Text.Json.Serialization;
 
 namespace Server.Models
 {
-    [Index(nameof(ChatId))]
+    [Microsoft.EntityFrameworkCore.Index(nameof(ChatId))]
     public class Message
     {
         [Key]

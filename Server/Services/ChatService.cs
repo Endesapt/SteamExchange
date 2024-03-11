@@ -10,14 +10,6 @@ using static AspNet.Security.OpenId.OpenIdAuthenticationConstants;
 
 namespace Server.Services
 {
-    public enum ImageFormat
-    {
-        bmp,
-        gif,
-        png,
-        jpeg,
-        unknown=-1
-    }
     public class ChatService:IChatService
     {
         public readonly ApplicationDbContext _context;

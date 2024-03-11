@@ -3,6 +3,7 @@ using Client.Services.Interfaces;
 using Client.ViewModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using IdentityModel.Client;
 using IdentityModel.OidcClient;
 
 namespace Client.ViewModel;
@@ -31,8 +32,10 @@ public partial class LoginViewModel:BaseViewModel
             }
 
             var accessToken = await _authHandler.LoginAsync();
-            await Shell.Current.DisplayAlert("AT", $"{accessToken}", "Ok");
-            if(accessToken != null)await Shell.Current.GoToAsync($"///{nameof(InventoriesPage)}");
+            if (accessToken != null) {
+                await Shell.Current.GoToAsync($"///{nameof(LoadingPage)}"); 
+            }
+            else await Shell.Current.DisplayAlert("Error", "Error while authenticating process, please,try later", "OK");
         }
         catch (Exception ex)
         {

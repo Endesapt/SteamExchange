@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -12,18 +13,19 @@ namespace Client.Services
     
     public class AuthorizationHandlerService:IAuthorizationHandler
     {
-        private readonly OidcClient _authClient;
+        private readonly OidcClient _client;
 
         public AuthorizationHandlerService(OidcClient authClient)
         {
-            _authClient = authClient;
+            _client = authClient;
         }
 
-        public string? AuthToken { get; set;}
+        string? AccessToken { get; set;}
+        public IEnumerable<Claim> UserClaims { get; set;}
 
         public async Task<string?> LoginAsync()
         {
-            var loginResult = await _authClient.LoginAsync(new LoginRequest());
+            var loginResult = await _client.LoginAsync(new LoginRequest());
             if (loginResult.IsError)
                 return null;
 
@@ -32,15 +34,38 @@ namespace Client.Services
             {
                 await SecureStorage.Default.SetAsync("refresh_token", loginResult.RefreshToken);
             }
-            AuthToken= loginResult.AccessToken;
-            return AuthToken;
+            AccessToken= loginResult.AccessToken;
+            UserClaims=loginResult.User.Claims;
+            return AccessToken;
         }
         public async Task<string?> GetAccessTokenAsync()
         {
-            if (AuthToken is not null) return AuthToken;
-            AuthToken = await SecureStorage.Default.GetAsync("access_token");
+            if (AccessToken is not null) return AccessToken;
+            AccessToken = await SecureStorage.Default.GetAsync("access_token");
 
-            return AuthToken;
+            return AccessToken;
+        }
+
+        public async Task<bool> IsAuthenticatedAsync()
+        {
+            var accessToken = await GetAccessTokenAsync();
+            if(accessToken is null) return false;
+            var userInfo = await _client.GetUserInfoAsync(accessToken);
+            if (userInfo.IsError) return false;
+            UserClaims = userInfo.Claims;
+            return true;
+        }
+
+        public long? GetUserId()
+        {
+            var userIdString = UserClaims?.FirstOrDefault((c) => c.Type == "sub")?.Value;
+            if(userIdString == null) return null;
+            var splicedUrl = userIdString.Split('/');
+            if (long.TryParse(splicedUrl.Last(), out var userId))
+            {
+                return userId;
+            }
+            return null;
         }
 
     }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Migrations.Operations;
 using Server.Models;
 using System.Reflection.Metadata;
 
@@ -18,8 +19,6 @@ namespace Server.Data
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options):
         base(options)
         {
-            Database.EnsureDeleted();
-            Database.EnsureCreated();
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -30,8 +29,8 @@ namespace Server.Data
             modelBuilder.Entity<Chat>()
                 .HasAlternateKey(f => new { f.UserId1, f.UserId2 });
             modelBuilder.Entity<UserWeapon>()
-                .HasKey(uw => new {uw.UserId,uw.WeaponClassId});
-            modelBuilder.Entity<TradeWeapon>().HasKey(tw => new { tw.TradeId, tw.UserId, tw.WeaponClassId });
+                .HasKey(uw => new {uw.UserId,uw.WeaponClassId,uw.AssetId});
+            modelBuilder.Entity<TradeWeapon>().HasKey(tw => new { tw.TradeId, tw.UserId, tw.WeaponClassId,tw.AssetId });
             modelBuilder.Entity<Trade>()
                 .HasMany(e => e.TradeWeapons)
                 .WithOne(e => e.Trade)

@@ -2,13 +2,14 @@ using Amazon.Runtime;
 using Amazon.S3;
 using Keycloak.AuthServices.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using Server.Data;
-using Server.Events;
 using Server.Hubs;
 using Server.Models;
 using Server.ResponseModels;
@@ -38,14 +39,23 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDefaultAWSOptions(builder.Configuration.GetAWSOptions());
 
-builder.Services.AddAuthorization();
-builder.Services.AddKeycloakAuthentication(builder.Configuration, o =>
+builder.Services.AddAuthentication(options =>
 {
-    o.RequireHttpsMetadata = false;
-});
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+  .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
+  {
+      options.Authority = $"https://settling-maggot-finally.ngrok-free.app";
+      options.TokenValidationParameters = new TokenValidationParameters
+      {
+          ValidateAudience = false,
+      };
+  });
 builder.Services.AddAuthorization();
 //Services
 builder.Services.AddTransient<IChatService,ChatService>();
+builder.Services.AddTransient<IUserService,UserService>();
 builder.Services.AddAWSService<IAmazonS3>();
 //Workers
 builder.Services.AddHostedService<WeaponUpdateWorker>();
@@ -61,7 +71,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 app.UseHttpsRedirection();
-
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();

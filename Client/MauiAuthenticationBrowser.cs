@@ -1,31 +1,34 @@
-﻿using IdentityModel.OidcClient.Browser;
+﻿using IdentityModel.Client;
+using IdentityModel.OidcClient.Browser;
 using System.Diagnostics;
 using IBrowser = IdentityModel.OidcClient.Browser.IBrowser;
 
 namespace Client
 {
-    internal class WebAuthenticationBrowser:IBrowser
+    internal class MauiAuthenticationBrowser:IBrowser
     {
         public async Task<BrowserResult> InvokeAsync(BrowserOptions options, CancellationToken cancellationToken = default)
         {
             try
             {
-                WebAuthenticatorResult authResult =
-                    await WebAuthenticator.AuthenticateAsync(new Uri(options.StartUrl), new Uri(options.EndUrl));
-                var authorizeResponse = ToRawIdentityUrl(options.EndUrl, authResult);
+                var result = await WebAuthenticator.Default.AuthenticateAsync(
+                    new Uri(options.StartUrl),
+                    new Uri(options.EndUrl));
+
+                var url = new RequestUrl("myapp://")
+                    .Create(new Parameters(result.Properties));
 
                 return new BrowserResult
                 {
-                    Response = authorizeResponse
+                    Response = url,
+                    ResultType = BrowserResultType.Success
                 };
             }
-            catch (Exception ex)
+            catch (TaskCanceledException)
             {
-                Debug.WriteLine(ex);
-                return new BrowserResult()
+                return new BrowserResult
                 {
-                    ResultType = BrowserResultType.UnknownError,
-                    Error = ex.ToString()
+                    ResultType = BrowserResultType.UserCancel
                 };
             }
         }

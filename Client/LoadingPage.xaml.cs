@@ -1,16 +1,26 @@
+using Client.Services.Interfaces;
+using IdentityModel.Client;
+
 namespace Client;
 
 public partial class LoadingPage : ContentPage
 {
-	public LoadingPage()
+    private IAuthorizationHandler _authorizationHandler;
+	public LoadingPage(IAuthorizationHandler authorizationHandler)
 	{
+        _authorizationHandler = authorizationHandler;
 		InitializeComponent();
 	}
     protected override async void OnNavigatedTo(NavigatedToEventArgs args)
     {
-        if (await SecureStorage.GetAsync("access_token") !=null)
+        if (await _authorizationHandler.IsAuthenticatedAsync())
         {
+            var httpClient = new HttpClient();
+            var accessToken=await _authorizationHandler.GetAccessTokenAsync();
+            httpClient.SetBearerToken(accessToken);
             await Shell.Current.GoToAsync($"///{nameof(InventoriesPage)}");
+            var answer = await httpClient.GetAsync("http://192.168.0.105:45455/checkUserCreated");
+            
         }
         else
         {

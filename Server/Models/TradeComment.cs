@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Server.Models
 {
-    [Index(nameof(TradeId))]
+    [Microsoft.EntityFrameworkCore.Index(nameof(TradeId))]
     public class TradeComment
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

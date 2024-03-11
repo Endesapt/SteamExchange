@@ -37,29 +37,30 @@ namespace Client
             builder.Services.AddSingleton<AuctionPage>();
             builder.Services.AddSingleton<InventoriesPage>();
             builder.Services.AddSingleton<LoginPage>();
+            builder.Services.AddTransient<LoadingPage>();
+            builder.Services.AddTransient<ProfilePage>();
             //ViewModels
             builder.Services.AddSingleton<InventoriesViewModel>();
             builder.Services.AddScoped<DialogViewModel>();
             builder.Services.AddSingleton<LoginViewModel>();
             builder.Services.AddSingleton<ChatViewModel>();
+            builder.Services.AddTransient<ProfileViewModel>();
             //Services
-            builder.Services.AddSingleton<IConnectivity>(Connectivity.Current);
+            builder.Services.AddSingleton(Connectivity.Current);
             builder.Services.AddSingleton<IAuthorizationHandler,AuthorizationHandlerService>();
+            builder.Services.AddTransient<IRequestService,RequestService>();
 
-            builder.Services.AddTransient<WebAuthenticationBrowser>();
-            builder.Services.AddTransient<OidcClient>(sp =>
-       new OidcClient(new OidcClientOptions
+            builder.Services.AddTransient<MauiAuthenticationBrowser>();
+            builder.Services.AddSingleton(sp =>
+       new OidcClient(new()
        {
-           Authority = "https://bb1f-87-252-236-142.ngrok-free.app",
+           Authority = "https://settling-maggot-finally.ngrok-free.app",
            ClientId = "steamid",
            Scope = "openid profile",
            RedirectUri = "myapp://",
            PostLogoutRedirectUri = "myapp://",
-           //Test client secret
-
-           ClientSecret = "f5K8Y2aVa2F1HRhlvOe",
-           HttpClientFactory = options => GetInsecureHttpClient(),
-           Browser = sp.GetRequiredService<WebAuthenticationBrowser>()
+           ClientSecret= "f5K8Y2aVa2F1HRhlvOe",
+           Browser = new MauiAuthenticationBrowser()
        }));
 #if DEBUG
             builder.Logging.AddDebug();

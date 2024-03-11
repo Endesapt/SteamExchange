@@ -2,22 +2,33 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Client.ProfilePage"
+             xmlns:viewmodel="clr-namespace:Client.ViewModel"
+             xmlns:model="clr-namespace:Client.Models"
+             xmlns:converters="clr-namespace:Client.Converters"
+             x:DataType="viewmodel:ProfileViewModel"
+             Shell.TabBarIsVisible="False"
+             Shell.NavBarIsVisible="False"
              Title="">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:NameToFloatNameConverter x:Key="floatNameConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
     <Grid RowDefinitions="50,130,Auto,Auto,40,*">
         <Grid ColumnDefinitions="40,*,40">
-            <Image Source="icons/angle_left.png" HeightRequest="20"/>
-            <Label Grid.Column="1" HorizontalTextAlignment="Center" Text="Профиль"/>
+            <Image  Source="icons/angle_left.png" HeightRequest="20"/>
+            <Label Grid.Column="1" HorizontalTextAlignment="Center" Text="Профиль" x:Name="TitleLabel"/>
             <Image Grid.Column="2" Source="icons/ellipsis_vertical.png" HeightRequest="20"/>
         </Grid>
         <Border  Grid.Row="1" HeightRequest="90" WidthRequest="90" 
                 StrokeShape="RoundRectangle 45" Stroke="Gold"
                  VerticalOptions="End" HorizontalOptions="Center">
-            <Image Source="negros.png" HeightRequest="90" WidthRequest="90"/>
+            <Image x:Name="ProfileImage"  HeightRequest="90" WidthRequest="90"/>
         </Border>
         <VerticalStackLayout Grid.Row="2">
-            <Label HorizontalOptions="Center" Padding="10"
-                   Text="SMat.la" FontSize="Medium"/>
-            <Button Text="Редактировать" VerticalOptions="Center" Padding="3"
+            <Label x:Name="UserNameLabel" HorizontalOptions="Center" Padding="10"
+                    FontSize="Medium"/>
+            <Button x:Name="EditDescriptionButton" IsVisible="true" Text="Редактировать" VerticalOptions="Center" Padding="3"
                     FontSize="9" WidthRequest="80" HeightRequest="20" 
                     CornerRadius="30" BackgroundColor="Gray"/>
             <Label TextColor="LightGray" Text="Люблю смотреть аниме и делать трейды ^_^ " 
@@ -30,7 +41,7 @@
                     <Label Text="Баланс"/>
                     <HorizontalStackLayout Spacing="3">
                         <Image Source="icons/coins.png" HeightRequest="17"/>
-                        <Label FontAttributes="Bold" Text="10000" FontSize="15"/>
+                        <Label x:Name="BalanceLabel" FontAttributes="Bold" Text="10000" FontSize="15"/>
                     </HorizontalStackLayout>
                 </VerticalStackLayout>
             </Frame>
@@ -39,7 +50,7 @@
                     <Label Text="Премиум"/>
                     <HorizontalStackLayout Spacing="3">
                         <Image Source="icons/star.png" HeightRequest="17"/>
-                        <Label FontAttributes="Bold" Text="19.01.2024" FontSize="15"/>
+                        <Label x:Name="Premium" FontAttributes="Bold" Text="19.01.2024" FontSize="15"/>
                     </HorizontalStackLayout>
                 </VerticalStackLayout>
             </Frame>
@@ -48,21 +59,9 @@
             <Label Text="Скины "/>
             <Label Grid.Column="1" Text="52" FontAttributes="Bold" HorizontalTextAlignment="Start"/>
         </Grid>
-        <CollectionView ItemsLayout="VerticalGrid, 2" Grid.Row="5" SelectionMode="None">
-            <CollectionView.ItemsSource>
-                <x:Array Type="{x:Type x:String}">
-                    <x:String>Tom</x:String>
-                    <x:String>Sam</x:String>
-                    <x:String>Bob</x:String>
-                    <x:String>Alice</x:String>
-                    <x:String>Kate</x:String>
-                    <x:String>Kate</x:String>
-                    <x:String>Kate</x:String>
-                    <x:String>Kate</x:String>
-                </x:Array>
-            </CollectionView.ItemsSource>
+        <CollectionView ItemsSource="{Binding ShowedWeapons}" ItemsLayout="VerticalGrid, 2" Grid.Row="5" SelectionMode="None">
             <CollectionView.ItemTemplate>
-                <DataTemplate >
+                <DataTemplate x:DataType="model:Weapon" >
                     <Border StrokeThickness='0.5' Stroke="White">
                         <Grid HeightRequest="120" 
                               ColumnDefinitions="Auto,*" RowDefinitions="Auto,*" >
@@ -72,17 +71,17 @@
                                     <GradientStop Color="{StaticResource GradientEndLight}" Offset="1.0" />
                                 </LinearGradientBrush>
                             </Grid.Background>
-                            <Label Text="31.45$" Padding="5" ZIndex="2" 
+                            <Label Text="{Binding Price,StringFormat='{0}$'}" Padding="5" ZIndex="2" 
                                    TextColor="White" FontAttributes="Bold"
                                    FontSize="15"/>
-                            <Image Source="https://steamcommunity-a.akamaihd.net/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXU5A1PIYQNqhpOSV-fRPasw8rsUFJ5KBFZv668FFQwnfCcJmxDv9rhwIHZwqP3a-uGwz9Xv8F0j-qQrI3xiVLkrxVuZW-mJoWLMlhpWhFkc9M"
+                            <Image Source="{Binding IconUrl,StringFormat='https://steamcommunity-a.akamaihd.net/economy/image/{0}'}"
                                 HeightRequest="120" 
                                 Grid.ColumnSpan="2"
                                 Grid.RowSpan="2"
                                />
                             <Label Grid.Row="2" 
                                HorizontalOptions="Start" VerticalOptions="End" 
-                               Text="MV" Padding="5" ZIndex="2" 
+                               Text="{Binding Name,Converter={StaticResource floatNameConverter}}" Padding="5" ZIndex="2" 
                                TextColor="White" FontAttributes="Bold"
                                FontSize="15"/>
                         </Grid>

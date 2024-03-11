@@ -3,8 +3,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Server.Models
 {
-    [Index(nameof(UserToId))]
-    [Index(nameof(UserFromId))]
+    [Microsoft.EntityFrameworkCore.Index(nameof(UserToId))]
+    [Microsoft.EntityFrameworkCore.Index(nameof(UserFromId))]
     public class Trade
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
