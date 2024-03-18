@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Server.Models
+namespace ModelLibrary
 {
-    [Microsoft.EntityFrameworkCore.Index(nameof(UserToId))]
-    [Microsoft.EntityFrameworkCore.Index(nameof(UserFromId))]
+    [Index(nameof(UserToId))]
+    [Index(nameof(UserFromId))]
     public class Trade
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

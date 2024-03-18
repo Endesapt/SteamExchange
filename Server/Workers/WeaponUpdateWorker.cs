@@ -57,7 +57,15 @@ namespace Server.Workers
                         }
                     }
                     );
-                    db.Weapons.AddRange(allWeapons.Values);
+                    db.Weapons.AddRange(allWeapons.Values.Select((wDto) => new ModelLibrary.Weapon
+                    {
+                        Price = wDto.Price,
+                        Name = wDto.Name,
+                        Type = wDto.Type,
+                        IsTradable = wDto.IsTradable==1,
+                        IconUrl = wDto.IconUrl,
+                        ClassId=wDto.ClassId??0
+                    }));
                     db.SaveChanges();
                     db.ChangeTracker.Clear();
 

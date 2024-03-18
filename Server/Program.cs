@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using ModelLibrary;
 using Server.Data;
 using Server.Hubs;
 using Server.Models;
@@ -18,7 +19,9 @@ using Server.Services.Interfaces;
 using Server.Workers;
 using System;
 using System.Security.Claims;
+using System.Text;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -56,6 +59,7 @@ builder.Services.AddAuthorization();
 //Services
 builder.Services.AddTransient<IChatService,ChatService>();
 builder.Services.AddTransient<IUserService,UserService>();
+builder.Services.AddTransient<IInventoryService, InventoryService>();
 builder.Services.AddAWSService<IAmazonS3>();
 //Workers
 builder.Services.AddHostedService<WeaponUpdateWorker>();
@@ -74,6 +78,7 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+
 app.MapHub<ChatHub>("/chat");
 
 app.Run();

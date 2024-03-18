@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace Server.Models
+namespace ModelLibrary
 {
     [Index(nameof(UserId1))]
     [Index(nameof(UserId2))]

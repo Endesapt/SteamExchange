@@ -1,4 +1,6 @@
-﻿using Server.ResponseModels;
+﻿using ModelLibrary;
+using Server.Models;
+using Server.ResponseModels;
 
 namespace Server.Services.Interfaces
 {
@@ -7,6 +9,6 @@ namespace Server.Services.Interfaces
         Task EnsureUserCreated(long userId);
         Task<bool> UpdateInventory(long userId);
 
-        ProfileResponseModel? GetProfile(long userId);
+        User? GetProfile(long userId);
     }
 }

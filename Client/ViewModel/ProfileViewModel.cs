@@ -1,5 +1,5 @@
-﻿using Client.Models;
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using ModelLibrary;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -14,8 +14,8 @@ namespace Client.ViewModel
     public partial class ProfileViewModel:BaseViewModel
     {
         [ObservableProperty]
-        public List<Weapon> showedWeapons=new();
-        public List<Weapon> Weapons = new();
+        public List<UserWeapon> showedWeapons=new();
+        public List<UserWeapon> Weapons = new();
         [ObservableProperty]
         long userId;
         [ObservableProperty]

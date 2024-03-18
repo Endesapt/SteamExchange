@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations.Operations;
+using ModelLibrary;
 using Server.Models;
 using System.Reflection.Metadata;
 
@@ -15,7 +16,8 @@ namespace Server.Data
         public DbSet<TradeWeapon> TradeWeapons { get; set; }
         public DbSet<Trade> Trades { get; set; }
         public DbSet<TradeComment> TradeComments { get; set; }
-
+        public DbSet<Offer> Offers { get; set; }
+        public DbSet<OfferWeapon> OfferWeapons { get; set; }
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options):
         base(options)
         {
@@ -35,6 +37,11 @@ namespace Server.Data
                 .HasMany(e => e.TradeWeapons)
                 .WithOne(e => e.Trade)
                 .HasForeignKey(e => e.TradeId);
+            modelBuilder.Entity<OfferWeapon>().HasKey(tw => new { tw.OfferId, tw.UserId, tw.WeaponClassId, tw.AssetId });
+            modelBuilder.Entity<Offer>()
+                .HasMany(e => e.OfferWeapons)
+                .WithOne(e => e.Offer)
+                .HasForeignKey(e => e.OfferId);
         }
         public override void Dispose()
         {

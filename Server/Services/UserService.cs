@@ -1,11 +1,11 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.EntityFrameworkCore;
+using ModelLibrary;
+using Newtonsoft.Json;
 using Server.Data;
-using Server.Dto;
 using Server.Helpers;
 using Server.Models;
 using Server.ResponseModels;
 using Server.Services.Interfaces;
-using System.Data.Entity;
 using System.Net.Http;
 using System.Web;
 
@@ -25,33 +25,22 @@ namespace Server.Services
         public async Task EnsureUserCreated(long userId)
         {
             var user = _context.Users.Find(userId);
+            await UpdateInventory(userId);
             if (user != null) return;
             await CreateUser(userId);
-            await UpdateInventory(userId);
+
 
 
         }
 
-        public ProfileResponseModel? GetProfile(long userId)
+        public User? GetProfile(long userId)
         {
             var user = _context.Users.Find(userId);
             if (user == null) return null;
-            var weapons = _context.UsersWeapons
-                .Include((uw) => uw.Weapon)
-                .Where((uw) => uw.UserId == userId)
-                .Select((uw)=>new WeaponDto(){ 
-                    ClassId = uw.WeaponClassId,
-                    AssetId=uw.AssetId,
-                    Price=uw.Weapon.Price,
-                    Name=uw.Weapon.Name,
-                    IconUrl=uw.Weapon.IconUrl,
-                    Count=uw.Count
-                });
-            return new ProfileResponseModel
-            {
-                User = user,
-                Weapons = weapons.ToList()
-            };
+            return _context.Users
+                .Include((u) => u.Weapons)
+                .ThenInclude(uw=>uw.Weapon)
+                .FirstOrDefault((uw) =>uw.Id==userId);
         }
 
         public async Task<bool> UpdateInventory(long userId)
@@ -132,6 +121,7 @@ namespace Server.Services
                     AvatarHash = responseUser.avatarhash,
                     UserName = responseUser.personaname,
                     Id = responseUser.steamid,
+                    InventoryUpgradeTime=DateTime.UtcNow
                 };
                 _context.Add(user);
                 _context.SaveChanges();

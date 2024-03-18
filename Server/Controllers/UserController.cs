@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ModelLibrary;
 using Server.Helpers;
 using Server.Models;
 using Server.ResponseModels;
@@ -27,9 +28,9 @@ namespace Server.Controllers
             return Ok();
         } 
         [HttpGet("getProfile")]
-        public async Task<ActionResult<ProfileResponseModel>> GetProfile(long userId)
+        public async Task<ActionResult<User>> GetProfile(long userId)
         {
-            ProfileResponseModel pm=_userService.GetProfile(userId);
+            User? pm=_userService.GetProfile(userId);
             if (pm == null) return BadRequest($"There is no user with Id {userId}");
             return Ok(pm);
         }

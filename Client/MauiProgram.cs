@@ -45,6 +45,7 @@ namespace Client
             builder.Services.AddSingleton<LoginViewModel>();
             builder.Services.AddSingleton<ChatViewModel>();
             builder.Services.AddTransient<ProfileViewModel>();
+            builder.Services.AddSingleton<AuctionViewModel>();
             //Services
             builder.Services.AddSingleton(Connectivity.Current);
             builder.Services.AddSingleton<IAuthorizationHandler,AuthorizationHandlerService>();

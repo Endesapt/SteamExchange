@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using ModelLibrary;
 using Server.Models;
 
 namespace Server.Services.Interfaces

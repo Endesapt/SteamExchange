@@ -106,6 +106,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <ProjectReference Include="..\ModelLibrary\ModelLibrary.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <Compile Update="ChatPage.xaml.cs">
 	    <DependentUpon>ChatPage.xaml</DependentUpon>
 	  </Compile>

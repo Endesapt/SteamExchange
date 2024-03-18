@@ -4,9 +4,15 @@
              xmlns:viewmodel="clr-namespace:Client.ViewModel"
              x:Class="Client.InventoriesPage"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
-             Title=""
+             xmlns:model="clr-namespace:ModelLibrary;assembly=ModelLibrary"
              x:DataType="viewmodel:InventoriesViewModel"
+             xmlns:converters="clr-namespace:Client.Converters"
              >
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:NameToFloatNameConverter x:Key="floatNameConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
     <Grid Margin="0,10,0,0" RowSpacing="5" RowDefinitions="40,35,*"  >
         <Grid  ColumnDefinitions="50,*,20,40,30,30"  Grid.Row="0" Margin="0,0,10,0"  ColumnSpacing="5" VerticalOptions="Center" HeightRequest="50">
             <Image Source="icons/plus.png"></Image>
@@ -39,18 +45,9 @@
         </Grid>
         <Button Margin="10,0" Grid.Row="1" Text="Поднять все на первое место"/>
         <CollectionView  Grid.Row="2"
-     SelectionMode="None">
-            <CollectionView.ItemsSource>
-                <x:Array Type="{x:Type x:String}">
-                    <x:String>Tom</x:String>
-                    <x:String>Sam</x:String>
-                    <x:String>Bob</x:String>
-                    <x:String>Alice</x:String>
-                    <x:String>Kate</x:String>
-                </x:Array>
-            </CollectionView.ItemsSource>
+     SelectionMode="None" ItemsSource="{Binding Inventories}">
             <CollectionView.ItemTemplate>
-                <DataTemplate x:DataType="{x:Type x:String}">
+                <DataTemplate x:DataType="{x:Type model:User}">
                     <VerticalStackLayout   Margin="0,10" Padding="0,0,0,10" BackgroundColor="{StaticResource AuctionCard}" >
                         <Grid HeightRequest="60" Padding="0,0,15,0" ColumnDefinitions="60,*,Auto">
                             <Border HeightRequest="35" WidthRequest="35"
@@ -58,14 +55,14 @@
                                 <Image Source="negros.png" WidthRequest="35" HeightRequest="35"/>
                             </Border>
                             <VerticalStackLayout Grid.Column="1" VerticalOptions="Center">
-                                <Label Text="Endesap1" FontAttributes="Bold" />
-                                <Label Text="46 скинов" />
+                                <Label Text="{Binding UserName}" FontAttributes="Bold" />
+                                <Label Text="{Binding Weapons.Count, StringFormat='{0} скинов'}" />
                             </VerticalStackLayout>
                             <Frame Grid.Column="2" CornerRadius="25" Margin="0,0,10,0" HeightRequest="45" 
                                    WidthRequest="45" BorderColor="Transparent">
                                 <Frame.GestureRecognizers>
                                     <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:InventoriesViewModel}}, Path=GoToDialogCommand}"
-                                                      CommandParameter="{Binding .}" />
+                                                      CommandParameter="{Binding Id}" />
                                 </Frame.GestureRecognizers>
                                 <Image Source="icons/comments.png" VerticalOptions="Center" HorizontalOptions="Center" 
                                        WidthRequest="20" HeightRequest="20"/>
@@ -76,25 +73,17 @@
                      ItemsLayout="HorizontalList"
                      HeightRequest="90"
                      SelectionMode="None"
+                     ItemsSource="{Binding Weapons}"
                      >
-                            <CollectionView.ItemsSource>
-                                <x:Array Type="{x:Type x:String}">
-                                    <x:String>Tom</x:String>
-                                    <x:String>Sam</x:String>
-                                    <x:String>Bob</x:String>
-                                    <x:String>Alice</x:String>
-                                    <x:String>Kate</x:String>
-                                </x:Array>
-                            </CollectionView.ItemsSource>
                             <CollectionView.ItemTemplate>
-                                <DataTemplate >
-                                    <AbsoluteLayout Style="{StaticResource ItemLayout}">
-                                        <Image Source="https://steamcommunity-a.akamaihd.net/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXU5A1PIYQNqhpOSV-fRPasw8rsUFJ5KBFZv668FFQwnfCcJmxDv9rhwIHZwqP3a-uGwz9Xv8F0j-qQrI3xiVLkrxVuZW-mJoWLMlhpWhFkc9M"
+                                <DataTemplate x:DataType="{x:Type model:UserWeapon}">
+                                    <AbsoluteLayout Style="{StaticResource ItemLayout}" WidthRequest="90">
+                                        <Image Source="{Binding Weapon.IconUrl, StringFormat='https://steamcommunity-a.akamaihd.net/economy/image/{0}'}"
                                          HeightRequest="90"
                                          WidthRequest="90"
                                           />
-                                        <Label Text="3.09$" Style="{StaticResource ItemLabel}" AbsoluteLayout.LayoutBounds="5,70"/>
-                                        <Label Text="MW" Style="{StaticResource ItemLabel}" AbsoluteLayout.LayoutBounds="5,50" />
+                                        <Label Text="{Binding Weapon.Price, StringFormat='{0}$'}" Style="{StaticResource ItemLabel}" AbsoluteLayout.LayoutBounds="5,70"/>
+                                        <Label Text="{Binding Weapon.Name,Converter={StaticResource floatNameConverter}}" Style="{StaticResource ItemLabel}" AbsoluteLayout.LayoutBounds="5,50" WidthRequest="45"/>
                                     </AbsoluteLayout>
                                 </DataTemplate>
                             </CollectionView.ItemTemplate>

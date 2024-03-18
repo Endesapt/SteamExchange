@@ -1,6 +1,6 @@
-using Client.Models.ResponseModels;
 using Client.Services.Interfaces;
 using Client.ViewModel;
+using ModelLibrary;
 
 namespace Client;
 
@@ -18,18 +18,18 @@ public partial class ProfilePage : ContentPage
     protected override async void OnAppearing()
     {
         base.OnAppearing();
-        var response=await _requestService.GetAsync<ProfileResponseModel>($"/getProfile?userId={_vm.UserId}");
+        var response=await _requestService.GetAsync<User>($"/getProfile?userId={_vm.UserId}",8,true);
 		if (response == null) { 
 			await DisplayAlert("Error", $"Cannot get profile of user with Id {_vm.UserId}","OK");
 			return;
 		}
 		if (!_vm.IsUserProfile) {
-			TitleLabel.Text = response.User.UserName; 
+			TitleLabel.Text = response.UserName; 
 		}
 		_vm.Weapons=response.Weapons;
-		_vm.ShowedWeapons = response.Weapons.OrderByDescending(w=>w.Price).ToList();
-		ProfileImage.Source = $"https://avatars.steamstatic.com/{response.User.AvatarHash}_full.jpg";
-		UserNameLabel.Text = response.User.UserName;
+		_vm.ShowedWeapons = response.Weapons.OrderByDescending(w=>w.Weapon.Price).ToList();
+		ProfileImage.Source = $"https://avatars.steamstatic.com/{response.AvatarHash}_full.jpg";
+		UserNameLabel.Text = response.UserName;
 
     }
 }

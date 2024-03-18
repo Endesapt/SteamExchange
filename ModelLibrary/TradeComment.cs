@@ -1,8 +1,7 @@
-﻿using Amazon.S3.Model;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Server.Models
+namespace ModelLibrary
 {
     [Microsoft.EntityFrameworkCore.Index(nameof(TradeId))]
     public class TradeComment

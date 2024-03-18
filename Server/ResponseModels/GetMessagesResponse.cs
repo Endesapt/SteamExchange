@@ -1,4 +1,5 @@
-﻿using Server.Models;
+﻿using ModelLibrary;
+using Server.Models;
 
 namespace Server.ResponseModels
 {

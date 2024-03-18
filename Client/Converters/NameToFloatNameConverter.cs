@@ -13,11 +13,11 @@ namespace Client.Converters
         {
             var valueString=value as string;
             if (valueString == null) return "";
-            if (valueString.Contains("(Battle-Scarred)")) return "BS";
-            if (valueString.Contains("(Factory New)")) return "FN";
-            if (valueString.Contains("(Minimal Wear)")) return "MW";
-            if (valueString.Contains("(Well-Worn)")) return "WW";
-            if (valueString.Contains("(Field-Tested)")) return "FT";
+            if (valueString.Contains("Battle-Scarred")) return "BS";
+            if (valueString.Contains("Factory New")) return "FN";
+            if (valueString.Contains("Minimal Wear")) return "MW";
+            if (valueString.Contains("Well-Worn")) return "WW";
+            if (valueString.Contains("Field-Tested")) return "FT";
             return "";
         }
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

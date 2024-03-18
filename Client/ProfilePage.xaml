@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Client.ProfilePage"
              xmlns:viewmodel="clr-namespace:Client.ViewModel"
-             xmlns:model="clr-namespace:Client.Models"
+             xmlns:model="clr-namespace:ModelLibrary;assembly=ModelLibrary"
              xmlns:converters="clr-namespace:Client.Converters"
              x:DataType="viewmodel:ProfileViewModel"
              Shell.TabBarIsVisible="False"
@@ -61,7 +61,7 @@
         </Grid>
         <CollectionView ItemsSource="{Binding ShowedWeapons}" ItemsLayout="VerticalGrid, 2" Grid.Row="5" SelectionMode="None">
             <CollectionView.ItemTemplate>
-                <DataTemplate x:DataType="model:Weapon" >
+                <DataTemplate x:DataType="model:UserWeapon" >
                     <Border StrokeThickness='0.5' Stroke="White">
                         <Grid HeightRequest="120" 
                               ColumnDefinitions="Auto,*" RowDefinitions="Auto,*" >
@@ -71,17 +71,17 @@
                                     <GradientStop Color="{StaticResource GradientEndLight}" Offset="1.0" />
                                 </LinearGradientBrush>
                             </Grid.Background>
-                            <Label Text="{Binding Price,StringFormat='{0}$'}" Padding="5" ZIndex="2" 
+                            <Label Text="{Binding Weapon.Price,StringFormat='{0}$'}" Padding="5" ZIndex="2" 
                                    TextColor="White" FontAttributes="Bold"
                                    FontSize="15"/>
-                            <Image Source="{Binding IconUrl,StringFormat='https://steamcommunity-a.akamaihd.net/economy/image/{0}'}"
+                            <Image Source="{Binding Weapon.IconUrl,StringFormat='https://steamcommunity-a.akamaihd.net/economy/image/{0}'}"
                                 HeightRequest="120" 
                                 Grid.ColumnSpan="2"
                                 Grid.RowSpan="2"
                                />
                             <Label Grid.Row="2" 
                                HorizontalOptions="Start" VerticalOptions="End" 
-                               Text="{Binding Name,Converter={StaticResource floatNameConverter}}" Padding="5" ZIndex="2" 
+                               Text="{Binding Weapon.Name,Converter={StaticResource floatNameConverter}}" Padding="5" ZIndex="2" 
                                TextColor="White" FontAttributes="Bold"
                                FontSize="15"/>
                         </Grid>
