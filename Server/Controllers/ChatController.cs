@@ -12,6 +12,7 @@ using Server.Models;
 using Server.ResponseModels;
 using Server.Services;
 using Server.Services.Interfaces;
+using System.Collections;
 using System.Security.Claims;
 
 
@@ -20,8 +21,6 @@ namespace Server.Controllers
     
     
     [ApiController]
-    [Route("api")]
-    [Authorize]
     public class ChatController : Controller
     {
         private readonly IChatService _chatService;
@@ -31,13 +30,13 @@ namespace Server.Controllers
             _chatService = chatService;
             _hubContext = hubContext;
         }
-        [HttpPost("createChat")]
-        public async Task<ActionResult<Chat>> CreateChat(long toUserId)
+        [HttpGet("getChat")]
+        public async Task<ActionResult<Chat>> GetChat(long toUserId)
         {
-            string userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (!ExtractIdHelper.ExtractedIdFromClaim(userIdString, out var userId))
                 return BadRequest("Cant extract steamID from AuthClaim");
-            Chat chat = await _chatService.CreateChat(userId, toUserId);
+            Chat chat = await _chatService.GetChatAsync(userId, toUserId);
             return chat;
             
         }
@@ -53,7 +52,7 @@ namespace Server.Controllers
             if (messageRequest.Image!=null&&!messageRequest.Image.ContentType.StartsWith("image/")) return BadRequest("content file is not image");
 
             long toUserId = chat.UserId1 == userId ? chat.UserId2 : chat.UserId1;
-            Message message = await _chatService.PostMessage(messageRequest, userId, toUserId);
+            Message message = await _chatService.PostMessageAsync(messageRequest, userId, toUserId);
 
             await _hubContext.Clients.Users(userId.ToString(),toUserId.ToString()).SendAsync("Receive", message);
             return message;
@@ -76,6 +75,16 @@ namespace Server.Controllers
             return Ok(response);
 
 
+        }
+        [HttpGet("getChats")]
+        public ActionResult<IEnumerable<Chat>> GetChats()
+        {
+            if (!ModelState.IsValid) return BadRequest();
+            var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (!ExtractIdHelper.ExtractedIdFromClaim(userIdString, out var userId))
+                return BadRequest("Cant extract steamID from AuthClaim");
+            return Ok(_chatService.GetChats(userId));
+            
         }
     }
 

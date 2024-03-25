@@ -9,7 +9,6 @@ using System.Security.Claims;
 
 namespace Server.Controllers
 {
-    [Authorize]
     public class UserController : Controller
     {
         private readonly IUserService _userService;
@@ -20,6 +19,9 @@ namespace Server.Controllers
         [HttpGet("/checkUserCreated")]
         public async Task<ActionResult> CheckUserCreated()
         {
+#if DEBUG
+            return Ok();
+#endif
             if(!ExtractIdHelper.ExtractedIdFromClaim(User?.FindFirst(ClaimTypes.NameIdentifier)?.Value,out var userId))
             {
                 return BadRequest("Cannot extract Id from User");

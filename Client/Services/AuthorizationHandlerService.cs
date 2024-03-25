@@ -48,6 +48,9 @@ namespace Client.Services
 
         public async Task<bool> IsAuthenticatedAsync()
         {
+#if DEBUG
+            return true;
+#endif
             var accessToken = await GetAccessTokenAsync();
             if(accessToken is null) return false;
             var userInfo = await _client.GetUserInfoAsync(accessToken);
@@ -58,6 +61,9 @@ namespace Client.Services
 
         public long? GetUserId()
         {
+#if DEBUG
+            return 76561198970753428;
+#endif
             var userIdString = UserClaims?.FirstOrDefault((c) => c.Type == "sub")?.Value;
             if(userIdString == null) return null;
             var splicedUrl = userIdString.Split('/');

@@ -21,13 +21,12 @@ public partial class AuctionPage : ContentPage
     protected override async void OnAppearing(
         )
 	{
-		base.OnAppearing();
         base.OnAppearing();
-        var imageSource = _authorizationHandler.UserClaims.FirstOrDefault((c) => c.Type == "picture")?.Value;
-        if (imageSource != null)
-        {
-            ProfileImage.Source = imageSource;
-        }
+        //var imageSource = _authorizationHandler.UserClaims.FirstOrDefault((c) => c.Type == "picture")?.Value;
+        //if (imageSource != null)
+        //{
+        //    ProfileImage.Source = imageSource;
+        //}
         var response =await _requestService.GetAsync<IEnumerable<Offer>>("/getOffers",8,true);
         _viewModel.Offers = new(response);
 		

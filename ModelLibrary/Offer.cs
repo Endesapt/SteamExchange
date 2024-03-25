@@ -17,5 +17,8 @@ namespace ModelLibrary
         public required DateTime PostTime { get; set; }
         public required DateTime UpTime { get; set; }
         public List<OfferWeapon> OfferWeapons { get; set; }
+        public int LikeCount {  get; set; }
+        public int CommentCount {  get; set; }
+        public string OfferMessage {  get; set; }
     }
 }

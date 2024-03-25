@@ -15,16 +15,15 @@ namespace Server.Services
     {
         public readonly ApplicationDbContext _context;
         public readonly IConfiguration _configuration;
-        public readonly IAmazonS3 _s3Client;
-        public ChatService(ApplicationDbContext context, IConfiguration configuration,IAmazonS3 s3Client)
+        private readonly IAmazonS3 _s3Client;
+        public ChatService(ApplicationDbContext context, IConfiguration configuration)
         {
             _context = context;
             _configuration = configuration;
-            _s3Client = s3Client;
         }
-        public async Task<Chat> CreateChat(long userId,long toUserId)
+        public async Task<Chat> GetChatAsync(long userId,long toUserId)
         {
-            Chat chat = await _context.Chats.FirstOrDefaultAsync(c =>
+            Chat? chat = await _context.Chats.FirstOrDefaultAsync(c =>
             (c.UserId1 == userId && c.UserId2 == toUserId) ||
             (c.UserId1 == toUserId && c.UserId2 == userId)
             );
@@ -39,7 +38,7 @@ namespace Server.Services
             await _context.SaveChangesAsync();
             return chat;
         }
-        public async Task<Message> PostMessage(MessageRequest model,long userId,long toUserId)
+        public async Task<Message> PostMessageAsync(MessageRequest model,long userId,long toUserId)
         {
             
             Message message = new() {
@@ -82,10 +81,17 @@ namespace Server.Services
         public bool CanUseChat(int chatId, long userId, out Chat chat)
         {
             chat = _context.Chats.Find(chatId);
-            if (chat == null) return false;
             if (chat.UserId1 != userId && chat.UserId2 != userId) return false;
             if (chat.IsBanned) return false;
             return true;
+        }
+
+        public IEnumerable<Chat> GetChats(long userId)
+        {
+            var chats = _context.Chats.Where(c =>
+                c.UserId1 == userId || c.UserId2 == userId
+            );
+            return chats;
         }
     }
 }

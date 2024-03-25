@@ -19,7 +19,9 @@ public partial class LoadingPage : ContentPage
             var accessToken=await _authorizationHandler.GetAccessTokenAsync();
             httpClient.SetBearerToken(accessToken);
             await Shell.Current.GoToAsync($"///{nameof(InventoriesPage)}");
+#if !DEBUG
             var answer = await httpClient.GetAsync("http://192.168.0.105:45455/checkUserCreated");
+#endif
             
         }
         else

@@ -42,4 +42,5 @@ public partial class LoginViewModel:BaseViewModel
             await Shell.Current.DisplayAlert("Error", ex.Message, "ok");
         }
     }
+    
 }

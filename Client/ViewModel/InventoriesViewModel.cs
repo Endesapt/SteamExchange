@@ -4,6 +4,7 @@ using CommunityToolkit.Mvvm.Input;
 using ModelLibrary;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,17 +14,22 @@ namespace Client.ViewModel
     public partial class InventoriesViewModel:BaseViewModel
     {
         private readonly IAuthorizationHandler _authorizationHandler;
+        private readonly IRequestService _requestService;
         [ObservableProperty]
-        public List<User> inventories=new();
-        public InventoriesViewModel(IAuthorizationHandler authorizationHandler)
+        public ObservableCollection<User> inventories=new();
+        public InventoriesViewModel(IAuthorizationHandler authorizationHandler, IRequestService requestService)
         {
-          _authorizationHandler = authorizationHandler;
+            _authorizationHandler = authorizationHandler;
+            _requestService = requestService;
         }
         [RelayCommand]
-        async Task GoToDialog(long userId)
+        async Task GoToDialog(long toUserId)
         {
-            await Shell.Current.DisplayAlert("you are going to page", userId.ToString(), "OK");
-            await Shell.Current.GoToAsync($"{nameof(DialogPage)}");
+            var chat = await _requestService.GetAsync<Chat>($"/getChat?toUserId={toUserId}",24,true);
+            await Shell.Current.GoToAsync($"{nameof(DialogPage)}",new Dictionary<string, object>()
+            {
+                {"chat",chat}
+            });
         }
         [RelayCommand]
         async Task GoToProfile(long userId)
@@ -32,7 +38,7 @@ namespace Client.ViewModel
             {
                 await Shell.Current.GoToAsync(nameof(ProfilePage), new Dictionary<string, object> {
                     {"userId",userId},
-                    {"isUserProfile",false}
+                    {"pageState",ProfilePageState.ShowOtherPage}
                 });
             }
             else
@@ -41,8 +47,27 @@ namespace Client.ViewModel
                 await Shell.Current.GoToAsync(nameof(ProfilePage), new Dictionary<string, object>
                 {
                     {"userId",userId},
-                    {"isUserProfile",true}
+                    {"pageState",ProfilePageState.ShowSelfPage}
                 });
+            }
+        }
+        [RelayCommand]
+        async Task Scrolled(ItemsViewScrolledEventArgs e)
+        {
+            if(IsBusy) return;
+            if(e.LastVisibleItemIndex>=Inventories.Count-5) 
+            {
+                IsBusy = true;
+                var fromTime = Inventories.Last().InventoryUpgradeTime.ToString("yyyyMMddHHmmssfff");
+                var response = await _requestService.GetAsync<IEnumerable<User>>($"/getInventories?count=10&fromTimeString={fromTime}", 15, true);
+                if (response != null)
+                {
+                    foreach(var user in response)
+                    {
+                        Inventories.Add(user);
+                    }
+                }
+                IsBusy = false;
             }
         }
     

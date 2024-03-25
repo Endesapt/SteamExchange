@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Client.ProfilePage"
              xmlns:viewmodel="clr-namespace:Client.ViewModel"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              xmlns:model="clr-namespace:ModelLibrary;assembly=ModelLibrary"
              xmlns:converters="clr-namespace:Client.Converters"
              x:DataType="viewmodel:ProfileViewModel"
@@ -14,52 +15,61 @@
             <converters:NameToFloatNameConverter x:Key="floatNameConverter" />
         </ResourceDictionary>
     </ContentPage.Resources>
-    <Grid RowDefinitions="50,130,Auto,Auto,40,*">
-        <Grid ColumnDefinitions="40,*,40">
+    <Grid RowDefinitions="50,Auto,30,*,Auto">
+        <Grid ColumnDefinitions="40,*,40" Grid.Row="0">
             <Image  Source="icons/angle_left.png" HeightRequest="20"/>
             <Label Grid.Column="1" HorizontalTextAlignment="Center" Text="Профиль" x:Name="TitleLabel"/>
             <Image Grid.Column="2" Source="icons/ellipsis_vertical.png" HeightRequest="20"/>
         </Grid>
-        <Border  Grid.Row="1" HeightRequest="90" WidthRequest="90" 
+        <Grid Grid.Row="1" RowDefinitions="90,Auto,Auto" IsVisible="{Binding ShowProfileMenu}">
+            <Border  Grid.Row="0" HeightRequest="90" WidthRequest="90" 
                 StrokeShape="RoundRectangle 45" Stroke="Gold"
                  VerticalOptions="End" HorizontalOptions="Center">
-            <Image x:Name="ProfileImage"  HeightRequest="90" WidthRequest="90"/>
-        </Border>
-        <VerticalStackLayout Grid.Row="2">
-            <Label x:Name="UserNameLabel" HorizontalOptions="Center" Padding="10"
+                <Image x:Name="ProfileImage"  HeightRequest="90" WidthRequest="90"/>
+            </Border>
+            <VerticalStackLayout Grid.Row="1">
+                <Label x:Name="UserNameLabel" HorizontalOptions="Center" Padding="10"
                     FontSize="Medium"/>
-            <Button x:Name="EditDescriptionButton" IsVisible="true" Text="Редактировать" VerticalOptions="Center" Padding="3"
+                <Button x:Name="EditDescriptionButton" IsVisible="true" Text="Редактировать" VerticalOptions="Center" Padding="3"
                     FontSize="9" WidthRequest="80" HeightRequest="20" 
                     CornerRadius="30" BackgroundColor="Gray"/>
-            <Label TextColor="LightGray" Text="Люблю смотреть аниме и делать трейды ^_^ " 
+                <Label TextColor="LightGray" Text="Люблю смотреть аниме и делать трейды ^_^ " 
                    WidthRequest="200" 
                    FontSize="Small" HorizontalTextAlignment="Center"/>
-        </VerticalStackLayout>
-        <Grid Grid.Row="3" HeightRequest="100" ColumnDefinitions="*,*"  ColumnSpacing="10" Padding="10">
-            <Frame Padding="10" BorderColor="LightGray">
-                <VerticalStackLayout VerticalOptions="Start" Spacing="10">
-                    <Label Text="Баланс"/>
-                    <HorizontalStackLayout Spacing="3">
-                        <Image Source="icons/coins.png" HeightRequest="17"/>
-                        <Label x:Name="BalanceLabel" FontAttributes="Bold" Text="10000" FontSize="15"/>
-                    </HorizontalStackLayout>
-                </VerticalStackLayout>
-            </Frame>
-            <Frame Grid.Column="1"  Padding="10" BorderColor="LightGray">
-                <VerticalStackLayout VerticalOptions="Start" Spacing="10">
-                    <Label Text="Премиум"/>
-                    <HorizontalStackLayout Spacing="3">
-                        <Image Source="icons/star.png" HeightRequest="17"/>
-                        <Label x:Name="Premium" FontAttributes="Bold" Text="19.01.2024" FontSize="15"/>
-                    </HorizontalStackLayout>
-                </VerticalStackLayout>
-            </Frame>
+            </VerticalStackLayout>
+            <Grid Grid.Row="2" HeightRequest="100" ColumnDefinitions="*,*"  ColumnSpacing="10" Padding="10">
+                <Frame Padding="10" BorderColor="LightGray">
+                    <VerticalStackLayout VerticalOptions="Start" Spacing="10">
+                        <Label Text="Баланс"/>
+                        <HorizontalStackLayout Spacing="3">
+                            <Image Source="icons/coins.png" HeightRequest="17"/>
+                            <Label x:Name="BalanceLabel" FontAttributes="Bold" Text="10000" FontSize="15"/>
+                        </HorizontalStackLayout>
+                    </VerticalStackLayout>
+                </Frame>
+                <Frame Grid.Column="1"  Padding="10" BorderColor="LightGray">
+                    <VerticalStackLayout VerticalOptions="Start" Spacing="10">
+                        <Label Text="Премиум"/>
+                        <HorizontalStackLayout Spacing="3">
+                            <Image Source="icons/star.png" HeightRequest="17"/>
+                            <Label x:Name="Premium" FontAttributes="Bold" Text="19.01.2024" FontSize="15"/>
+                        </HorizontalStackLayout>
+                    </VerticalStackLayout>
+                </Frame>
+            </Grid>
         </Grid>
-        <Grid Grid.Row="4" ColumnDefinitions="Auto,*,40" Padding="10">
+        <Grid Grid.Row="2" ColumnDefinitions="Auto,*,40" Padding="10,0">
             <Label Text="Скины "/>
-            <Label Grid.Column="1" Text="52" FontAttributes="Bold" HorizontalTextAlignment="Start"/>
+            <Label Grid.Column="1" Text="{Binding ShowedWeapons.Count}" FontAttributes="Bold" HorizontalTextAlignment="Start"/>
         </Grid>
-        <CollectionView ItemsSource="{Binding ShowedWeapons}" ItemsLayout="VerticalGrid, 2" Grid.Row="5" SelectionMode="None">
+        <CollectionView x:Name="WeaponsCollectionView" ItemsSource="{Binding ShowedWeapons}" ItemsLayout="VerticalGrid, 2" Grid.Row="3"
+                        SelectionMode="Multiple">
+            <CollectionView.Behaviors>
+                <toolkit:EventToCommandBehavior
+                    x:TypeArguments="SelectionChangedEventArgs"
+                    EventName="SelectionChanged"
+                    Command="{Binding CollectionSelectionChangedCommand }" />
+            </CollectionView.Behaviors>
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="model:UserWeapon" >
                     <Border StrokeThickness='0.5' Stroke="White">
@@ -89,5 +99,46 @@
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
+        <Grid Grid.Row="4" HeightRequest="150" IsVisible="{Binding ShowTradeFlyout}" 
+              RowDefinitions="40,100">
+            <Grid BackgroundColor="#392548" ColumnDefinitions="3*,2*">
+                <Label Padding="10" Text="{Binding CheckedWeapons.Count,StringFormat='Выбрано {0} предмета(ов)'}" TextColor="White" FontAttributes="Bold" FontSize="Header" />
+                <Button Grid.Column="1" Text="Продолжить" HeightRequest="30" Margin="0,0,10,0" FontAttributes="Bold" CornerRadius="20"
+                        BackgroundColor="#694795" >
+                    <Button.Behaviors>
+                        <toolkit:EventToCommandBehavior EventName="Clicked"
+                                                        Command="{Binding ContinueCommand }"/>
+                    </Button.Behaviors>
+                </Button>
+            </Grid>
+            <CollectionView Grid.Row="2" BackgroundColor="#794194" ItemsSource="{Binding CheckedWeapons}" ItemsLayout="HorizontalGrid">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="model:UserWeapon">
+                        <Grid HeightRequest="70" Margin="10" WidthRequest="90" 
+                  ColumnDefinitions="Auto,*" RowDefinitions="Auto,*" >
+                            <Grid.Background >
+                                <LinearGradientBrush EndPoint="0,1">
+                                    <GradientStop Color="{StaticResource GradinentStartLight}" Offset="0.1" />
+                                    <GradientStop Color="{StaticResource GradientEndLight}" Offset="1.0" />
+                                </LinearGradientBrush>
+                            </Grid.Background>
+                            <Label Text="{Binding Weapon.Price,StringFormat='{0}$'}" Padding="5" ZIndex="2" 
+                       TextColor="White" FontAttributes="Bold"
+                       FontSize="14"/>
+                            <Image Source="{Binding Weapon.IconUrl,StringFormat='https://steamcommunity-a.akamaihd.net/economy/image/{0}'}"
+                    HeightRequest="80" 
+                    Grid.ColumnSpan="2"
+                    Grid.RowSpan="2"
+                   />
+                            <Label Grid.Row="2" 
+                   HorizontalOptions="Start" VerticalOptions="End" 
+                   Text="{Binding Weapon.Name,Converter={StaticResource floatNameConverter}}" Padding="5" ZIndex="2" 
+                   TextColor="White" FontAttributes="Bold"
+                   FontSize="15"/>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </Grid>
     </Grid>
 </ContentPage>

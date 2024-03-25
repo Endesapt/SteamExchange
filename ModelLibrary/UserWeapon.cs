@@ -15,5 +15,6 @@ namespace ModelLibrary
         public Weapon Weapon { get; set; } = null!;
         [JsonPropertyName("amount")]
         public required int Count { get; set; }
+        public bool IsInAuction {  get; set; }
     }
 }

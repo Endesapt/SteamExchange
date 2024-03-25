@@ -1,4 +1,5 @@
 ﻿
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -13,13 +14,13 @@ namespace ModelLibrary
     {
         [Key]
         public long Id { get; set; }
-        public required DateTime SendTime { get; set; }
-        public required int ChatId { get; set; }
-        public required long FromUserId { get; set; }
-        public required long ToUserId { get; set; }
+        public DateTime SendTime { get; set; }
+        public int ChatId { get; set; }
+        public long FromUserId { get; set; }
+        public long ToUserId { get; set; }
 
         [NotNull]
-        public required string MessageText { get; set; }
+        public string MessageText { get; set; }
         public string? ImageKey { get; set; }
 
         public Trade? Trade { get; set; }

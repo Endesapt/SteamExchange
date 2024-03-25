@@ -1,4 +1,6 @@
-﻿using CommunityToolkit.Mvvm.Input;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using ModelLibrary;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +11,8 @@ namespace Client.ViewModel
 {
     public partial class ChatViewModel:BaseViewModel
     {
+        [ObservableProperty]
+        List<Chat> chats = new();
         [RelayCommand]
         async Task GoToDialog(string str)
         {

@@ -23,9 +23,18 @@ public partial class ProfilePage : ContentPage
 			await DisplayAlert("Error", $"Cannot get profile of user with Id {_vm.UserId}","OK");
 			return;
 		}
-		if (!_vm.IsUserProfile) {
-			TitleLabel.Text = response.UserName; 
+		if (_vm.ProfileCurrentState==ProfilePageState.ShowSelfPage) {
+			WeaponsCollectionView.SelectionMode=SelectionMode.None;
 		}
+		if(_vm.ProfileCurrentState!=ProfilePageState.ShowSelfPage &&
+			_vm.ProfileCurrentState != ProfilePageState.ShowOtherPage)
+		{
+			_vm.ShowProfileMenu = false;
+		}
+		else
+		{
+            TitleLabel.Text = response.UserName;
+        }
 		_vm.Weapons=response.Weapons;
 		_vm.ShowedWeapons = response.Weapons.OrderByDescending(w=>w.Weapon.Price).ToList();
 		ProfileImage.Source = $"https://avatars.steamstatic.com/{response.AvatarHash}_full.jpg";

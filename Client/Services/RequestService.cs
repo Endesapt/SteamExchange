@@ -1,6 +1,7 @@
 ﻿using Client.Services.Interfaces;
 using IdentityModel.Client;
 using Microsoft.Extensions.Configuration;
+using ModelLibrary;
 using MonkeyCache.FileStore;
 using System;
 using System.Collections.Generic;
@@ -18,10 +19,17 @@ namespace Client.Services
         private readonly IAuthorizationHandler _authorizationHandler;
         public RequestService(IConfiguration configuration, IAuthorizationHandler authorizationHandler)
         {
-            BaseURL = "http://192.168.0.105:45455/";
+            //BaseURL = "http://192.168.0.105:45455/";
+            BaseURL = "https://settling-maggot-finally.ngrok-free.app";
             _authorizationHandler = authorizationHandler;
         }
-        public async Task<T> GetAsync<T>(string url, int hours, bool forceRefresh)
+
+        public async Task<bool> CreateOfferAsync(IEnumerable<UserWeapon> weapons)
+        {
+            return await PostAsync("/createAuction", weapons);
+        }
+
+        public async Task<T> GetAsync<T>(string url, int minutes, bool forceRefresh)
         {
             if (!forceRefresh && !Barrel.Current.IsExpired(url))
                 return Barrel.Current.Get<T>(url);
@@ -33,7 +41,7 @@ namespace Client.Services
             try
             {
                 T result = await httpClient.GetFromJsonAsync<T>(url);
-                Barrel.Current.Add(url, result, TimeSpan.FromHours(hours));
+                Barrel.Current.Add(url, result, TimeSpan.FromMinutes(minutes));
                 return result;
             }
             catch (Exception ex)
@@ -42,6 +50,17 @@ namespace Client.Services
             }
 
             return default;
+        }
+
+        public async Task<bool> PostAsync(string url,object obj)
+        {
+            var httpClient = new HttpClient();
+            httpClient.BaseAddress = new Uri(BaseURL);
+            httpClient.SetBearerToken(
+                await _authorizationHandler.GetAccessTokenAsync()
+                );
+            var responce = await httpClient.PostAsJsonAsync(url,obj);
+            return responce.IsSuccessStatusCode;
         }
     }
 }

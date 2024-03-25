@@ -5,15 +5,51 @@ using Server.Data;
 using Server.Models;
 using Server.ResponseModels;
 using Server.Services.Interfaces;
+using System.Linq;
 
 namespace Server.Services
 {
-    public class InventoryService : IInventoryService
+    public class OfferService : IOfferService
     {
         private readonly ApplicationDbContext _context;
-        public InventoryService(ApplicationDbContext context)
+        public OfferService(ApplicationDbContext context)
         {
             _context = context;
+        }
+
+        public async Task<Offer?> createOffer(IEnumerable<UserWeapon> userWeapons,long userId)
+        {
+            var allUserWeapons = _context.UsersWeapons.Where(uw => uw.UserId == userId).ToList();
+            foreach(var uw in userWeapons)
+            {
+                if (allUserWeapons.FirstOrDefault(w=>w.WeaponClassId==uw.WeaponClassId
+                && w.Count==uw.Count && uw.AssetId==w.AssetId) is null)
+                {
+                    return null;
+                }
+            }
+            var offer = new Offer()
+            {
+                UserId=userId,
+                PostTime=DateTime.UtcNow,
+                UpTime=DateTime.UtcNow,
+
+            };
+            _context.Add(offer);
+            var offerWeapons = userWeapons.Select(uw => new OfferWeapon()
+            {
+                WeaponClassId = uw.WeaponClassId,
+                UserId = userId,
+                OfferId = offer.Id,
+                AssetId=uw.AssetId
+            });
+            foreach (var ow in offerWeapons)
+            {
+                _context.Add(ow);
+            }
+            await _context.SaveChangesAsync();
+            return offer;
+
         }
 
         public IEnumerable<User> GetInventories(DateTime fromTime, int count = 20)

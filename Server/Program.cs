@@ -42,24 +42,24 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDefaultAWSOptions(builder.Configuration.GetAWSOptions());
 
-builder.Services.AddAuthentication(options =>
-{
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-})
-  .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
-  {
-      options.Authority = $"https://settling-maggot-finally.ngrok-free.app";
-      options.TokenValidationParameters = new TokenValidationParameters
-      {
-          ValidateAudience = false,
-      };
-  });
-builder.Services.AddAuthorization();
+//builder.Services.AddAuthentication(options =>
+//{
+//    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+//    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+//})
+//  .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
+//  {
+//      options.Authority = $"https://settling-maggot-finally.ngrok-free.app";
+//      options.TokenValidationParameters = new TokenValidationParameters
+//      {
+//          ValidateAudience = false,
+//      };
+//  });
+//builder.Services.AddAuthorization();
 //Services
 builder.Services.AddTransient<IChatService,ChatService>();
 builder.Services.AddTransient<IUserService,UserService>();
-builder.Services.AddTransient<IInventoryService, InventoryService>();
+builder.Services.AddTransient<IOfferService, OfferService>();
 builder.Services.AddAWSService<IAmazonS3>();
 //Workers
 builder.Services.AddHostedService<WeaponUpdateWorker>();
@@ -75,8 +75,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 app.UseHttpsRedirection();
-app.UseAuthentication();
-app.UseAuthorization();
+//app.UseAuthentication();
+//app.UseAuthorization();
 app.MapControllers();
 
 app.MapHub<ChatHub>("/chat");

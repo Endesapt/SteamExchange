@@ -1,4 +1,6 @@
-﻿namespace Server.Models
+﻿using Microsoft.AspNetCore.Http;
+
+namespace Server.Models
 {
     public class MessageRequest
     {

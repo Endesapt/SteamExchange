@@ -5,7 +5,7 @@
              Shell.TabBarIsVisible="False"
              Shell.NavBarIsVisible="False"
              xmlns:viewmodel="clr-namespace:Client.ViewModel"
-             xmlns:model="clr-namespace:Client.Models"
+             xmlns:model="clr-namespace:ModelLibrary;assembly=ModelLibrary"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:DataType="viewmodel:DialogViewModel"
              Title="">

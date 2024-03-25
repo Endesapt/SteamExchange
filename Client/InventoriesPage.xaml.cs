@@ -24,15 +24,16 @@ public partial class InventoriesPage : ContentPage
     protected override async void OnAppearing()
     {
         base.OnAppearing();
-		var imageSource = _authorizationHandler.UserClaims.FirstOrDefault((c) => c.Type == "picture")?.Value;
-		if (imageSource != null)
-		{
-			ProfileImage.Source = imageSource;
-		}
-		var response = await _requestService.GetAsync<IEnumerable<User>>("/getInventories",8,true);
+        if (_viewModel.Inventories.Any()) return;
+            //var imageSource = _authorizationHandler.UserClaims.FirstOrDefault((c) => c.Type == "picture")?.Value;
+            //if (imageSource != null)
+            //{
+            //	ProfileImage.Source = imageSource;
+            //}
+            var response = await _requestService.GetAsync<IEnumerable<User>>("/getInventories",8,true);
 		if (response != null)
 		{
-			_viewModel.Inventories = response.ToList();
+			_viewModel.Inventories = new(response);
 		}
     }
 }
